@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    # ── TiDB Cloud connection ──────────────────────────────────────────
+    # Thay <HOST>, <USERNAME>, <PASSWORD> bằng thông tin từ TiDB Cloud Console
+    # Connect → MySQL CLI → copy host + user + password
+    # ──────────────────────────────────────────────────────────────────
+    url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/lavela_pool?sslMode=VERIFY_IDENTITY&enabledTLSProtocols=TLSv1.2,TLSv1.3
+    username: ${TIDB_USERNAME:WbnWVMnydCuPte3.root}
+    password: ${TIDB_PASSWORD:XPbx6tV6xc9kwLzU}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 30000
+      # TiDB Cloud Serverless tự đóng idle connection sau ~5 phút
+      keepalive-time: 60000
+      idle-timeout: 120000
+
+  jpa:
+    hibernate:
+      # update: Hibernate tự tạo/cập nhật bảng theo Entity
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    com.lavela: DEBUG
+    org.hibernate.SQL: DEBUG
